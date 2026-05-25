@@ -3,7 +3,7 @@ import Column from './Column';
 
 const STATUSES = ['todo', 'in-progress', 'done'];
 
-export default function KanbanBoard({ tasks, onDragEnd, onDelete }) {
+export default function KanbanBoard({ tasks, onDragEnd, onDelete, onEdit }) {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="kanban-board">
@@ -13,6 +13,7 @@ export default function KanbanBoard({ tasks, onDragEnd, onDelete }) {
             status={status}
             tasks={tasks.filter((t) => t.status === status)}
             onDelete={onDelete}
+            onEdit={onEdit}
           />
         ))}
       </div>

@@ -25,7 +25,22 @@ router.post('/', (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
-  const { status } = req.body;
+  const { status, title } = req.body;
+
+  if (title !== undefined) {
+    if (!title || !title.trim()) {
+      return res.status(400).json({ error: 'title must be a non-empty string' });
+    }
+    const result = db
+      .prepare('UPDATE tasks SET title = ? WHERE id = ?')
+      .run(title.trim(), req.params.id);
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(req.params.id);
+    return res.json(task);
+  }
+
   const validStatuses = ['todo', 'in-progress', 'done'];
   if (!validStatuses.includes(status)) {
     return res.status(400).json({ error: `status must be one of: ${validStatuses.join(', ')}` });

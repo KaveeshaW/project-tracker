@@ -159,6 +159,28 @@ main {
   opacity: 0.95;
 }
 
+.task-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  color: #97a0af;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.edit-btn:hover {
+  background: #e6f0ff;
+  color: #0052cc;
+}
+
 .delete-btn {
   background: none;
   border: none;
@@ -173,6 +195,57 @@ main {
 .delete-btn:hover {
   background: #ffebe6;
   color: #de350b;
+}
+
+.task-edit-input {
+  flex: 1;
+  padding: 4px 6px;
+  border: 1px solid #0065ff;
+  border-radius: 3px;
+  font-size: 14px;
+  color: #172b4d;
+  background: white;
+  outline: none;
+  min-width: 0;
+}
+
+.task-edit-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.save-btn {
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: none;
+  background: #0065ff;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.save-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.save-btn:not(:disabled):hover {
+  background: #0052cc;
+}
+
+.cancel-btn {
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid #dfe1e6;
+  background: white;
+  color: #5e6c84;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #f4f5f7;
 }
 
 .delete-project-btn {

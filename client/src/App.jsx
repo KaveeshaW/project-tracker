@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   getProjects, createProject, deleteProject,
-  getTasks, createTask, updateTaskStatus, deleteTask,
+  getTasks, createTask, updateTaskStatus, updateTaskTitle, deleteTask,
 } from './api';
 import ProjectSelector from './components/ProjectSelector';
 import KanbanBoard from './components/KanbanBoard';
@@ -53,6 +53,16 @@ export default function App() {
     setTasks((prev) => prev.filter((t) => t.id !== id));
   }
 
+  async function handleEditTask(id, title) {
+    const original = tasks.find((t) => t.id === id)?.title;
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, title } : t)));
+    try {
+      await updateTaskTitle(id, title);
+    } catch {
+      setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, title: original } : t)));
+    }
+  }
+
   async function handleDragEnd(result) {
     const { destination, source, draggableId } = result;
     if (!destination || destination.droppableId === source.droppableId) return;
@@ -90,7 +100,7 @@ export default function App() {
         {activeProjectId == null ? (
           <p className="empty-state">No project selected. Create one above to get started.</p>
         ) : (
-          <KanbanBoard tasks={tasks} onDragEnd={handleDragEnd} onDelete={handleDelete} />
+          <KanbanBoard tasks={tasks} onDragEnd={handleDragEnd} onDelete={handleDelete} onEdit={handleEditTask} />
         )}
       </main>
     </div>

@@ -20,4 +20,6 @@ export const createTask = (projectId, title) =>
   request('/tasks', { method: 'POST', body: JSON.stringify({ projectId, title }) });
 export const updateTaskStatus = (id, status) =>
   request(`/tasks/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) });
+export const updateTaskTitle = (id, title) =>
+  request(`/tasks/${id}`, { method: 'PATCH', body: JSON.stringify({ title }) });
 export const deleteTask = (id) => request(`/tasks/${id}`, { method: 'DELETE' });

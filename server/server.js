@@ -14,5 +14,9 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-const PORT = 3001;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+module.exports = app;
+
+if (require.main === module) {
+  const PORT = 3001;
+  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+}
