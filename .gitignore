@@ -2,3 +2,5 @@ node_modules/
 server/db.sqlite
 dist/
 .DS_Store
+playwright-report/
+test-results/
