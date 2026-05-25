@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function ProjectSelector({ projects, activeProjectId, onSelect, onCreate }) {
+export default function ProjectSelector({ projects, activeProjectId, onSelect, onCreate, onDelete }) {
   const [newName, setNewName] = useState('');
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState('');
@@ -29,6 +29,20 @@ export default function ProjectSelector({ projects, activeProjectId, onSelect, o
           <option key={p.id} value={p.id}>{p.name}</option>
         ))}
       </select>
+
+      {activeProjectId && !creating && (
+        <button
+          className="delete-project-btn"
+          onClick={() => {
+            const project = projects.find((p) => p.id === activeProjectId);
+            if (window.confirm(`Delete "${project?.name}" and all its tasks?`)) {
+              onDelete(activeProjectId);
+            }
+          }}
+        >
+          Delete Project
+        </button>
+      )}
 
       {creating ? (
         <form onSubmit={handleCreate}>

@@ -23,4 +23,16 @@ router.post('/', (req, res) => {
   }
 });
 
+router.delete('/:id', (req, res) => {
+  const project = db.prepare('SELECT id FROM projects WHERE id = ?').get(req.params.id);
+  if (!project) {
+    return res.status(404).json({ error: 'Project not found' });
+  }
+  db.transaction(() => {
+    db.prepare('DELETE FROM tasks WHERE project_id = ?').run(req.params.id);
+    db.prepare('DELETE FROM projects WHERE id = ?').run(req.params.id);
+  })();
+  res.json({ ok: true });
+});
+
 module.exports = router;

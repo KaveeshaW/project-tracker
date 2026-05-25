@@ -42,6 +42,8 @@ body {
   border-radius: 4px;
   border: none;
   font-size: 14px;
+  color: #172b4d;
+  background: white;
 }
 
 .project-selector input {
@@ -49,6 +51,8 @@ body {
   border-radius: 4px;
   border: none;
   font-size: 14px;
+  color: #172b4d;
+  background: white;
 }
 
 .project-selector button,
@@ -94,6 +98,7 @@ main {
   font-size: 14px;
   width: 280px;
   background: white;
+  color: #172b4d;
 }
 
 .add-task-form input:disabled {
@@ -168,6 +173,28 @@ main {
 .delete-btn:hover {
   background: #ffebe6;
   color: #de350b;
+}
+
+.delete-project-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  background: #ffebe6;
+  color: #de350b;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.delete-project-btn:hover {
+  background: #de350b;
+  color: white;
+}
+
+.empty-state {
+  color: #5e6c84;
+  font-size: 15px;
+  margin-top: 48px;
+  text-align: center;
 }
 
 .error {

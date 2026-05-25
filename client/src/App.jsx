@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
-  getProjects, createProject,
+  getProjects, createProject, deleteProject,
   getTasks, createTask, updateTaskStatus, deleteTask,
 } from './api';
 import ProjectSelector from './components/ProjectSelector';
@@ -29,6 +29,18 @@ export default function App() {
     const project = await createProject(name);
     setProjects((prev) => [project, ...prev]);
     setActiveProjectId(project.id);
+  }
+
+  async function handleDeleteProject(id) {
+    await deleteProject(id);
+    const remaining = projects.filter((p) => p.id !== id);
+    setProjects(remaining);
+    if (remaining.length > 0) {
+      setActiveProjectId(remaining[0].id);
+    } else {
+      setActiveProjectId(null);
+      setTasks([]);
+    }
   }
 
   async function handleAddTask(title) {
@@ -70,11 +82,16 @@ export default function App() {
           activeProjectId={activeProjectId}
           onSelect={setActiveProjectId}
           onCreate={handleCreateProject}
+          onDelete={handleDeleteProject}
         />
       </header>
       <main>
         <AddTaskForm disabled={activeProjectId == null} onAdd={handleAddTask} />
-        <KanbanBoard tasks={tasks} onDragEnd={handleDragEnd} onDelete={handleDelete} />
+        {activeProjectId == null ? (
+          <p className="empty-state">No project selected. Create one above to get started.</p>
+        ) : (
+          <KanbanBoard tasks={tasks} onDragEnd={handleDragEnd} onDelete={handleDelete} />
+        )}
       </main>
     </div>
   );

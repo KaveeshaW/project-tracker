@@ -13,6 +13,7 @@ async function request(path, options = {}) {
 export const getProjects = () => request('/projects');
 export const createProject = (name) =>
   request('/projects', { method: 'POST', body: JSON.stringify({ name }) });
+export const deleteProject = (id) => request(`/projects/${id}`, { method: 'DELETE' });
 
 export const getTasks = (projectId) => request(`/tasks?projectId=${projectId}`);
 export const createTask = (projectId, title) =>
