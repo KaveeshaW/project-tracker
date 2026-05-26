@@ -11,6 +11,13 @@ db.exec(`
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
+  CREATE TABLE IF NOT EXISTS categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    color TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
   CREATE TABLE IF NOT EXISTS tasks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id INTEGER NOT NULL REFERENCES projects(id),
@@ -19,5 +26,12 @@ db.exec(`
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 `);
+
+// Add category_id to existing tasks table if not already present
+try {
+  db.exec('ALTER TABLE tasks ADD COLUMN category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL');
+} catch {
+  // column already exists — safe to ignore
+}
 
 module.exports = db;

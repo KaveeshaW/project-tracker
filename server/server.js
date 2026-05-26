@@ -8,6 +8,7 @@ app.use(express.json());
 
 app.use('/projects', require('./routes/projects'));
 app.use('/tasks', require('./routes/tasks'));
+app.use('/categories', require('./routes/categories'));
 
 app.use((err, req, res, next) => {
   console.error(err);

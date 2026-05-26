@@ -13,19 +13,30 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { projectId, title } = req.body;
+  const { projectId, title, category_id } = req.body;
   if (!projectId || !title || !title.trim()) {
     return res.status(400).json({ error: 'projectId and title are required' });
   }
   const result = db
-    .prepare('INSERT INTO tasks (project_id, title) VALUES (?, ?)')
-    .run(projectId, title.trim());
+    .prepare('INSERT INTO tasks (project_id, title, category_id) VALUES (?, ?, ?)')
+    .run(projectId, title.trim(), category_id ?? null);
   const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json(task);
 });
 
 router.patch('/:id', (req, res) => {
-  const { status, title } = req.body;
+  const { status, title, category_id } = req.body;
+
+  if (category_id !== undefined) {
+    const result = db
+      .prepare('UPDATE tasks SET category_id = ? WHERE id = ?')
+      .run(category_id, req.params.id);
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+    const task = db.prepare('SELECT * FROM tasks WHERE id = ?').get(req.params.id);
+    return res.json(task);
+  }
 
   if (title !== undefined) {
     if (!title || !title.trim()) {

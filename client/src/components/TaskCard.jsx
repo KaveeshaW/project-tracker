@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Draggable } from '@hello-pangea/dnd';
 
-export default function TaskCard({ task, index, onDelete, onEdit }) {
+export default function TaskCard({ task, index, onDelete, onEdit, categories }) {
+  const category = categories?.find((c) => c.id === task.category_id);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
 
@@ -65,7 +66,12 @@ export default function TaskCard({ task, index, onDelete, onEdit }) {
             </>
           ) : (
             <>
-              <span>{task.title}</span>
+              <div className="task-title-row">
+                {category && (
+                  <span className="task-cat-dot" style={{ background: category.color }} title={category.name} />
+                )}
+                <span>{task.title}</span>
+              </div>
               <div className="task-actions">
                 <button className="edit-btn" onClick={startEdit}>✏</button>
                 <button className="delete-btn" onClick={() => onDelete(task.id)}>✕</button>
