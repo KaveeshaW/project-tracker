@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Draggable } from '@hello-pangea/dnd';
 
 export default function TaskCard({ task, index, onDelete, onEdit, onSetCategory, categories }) {
@@ -6,6 +6,21 @@ export default function TaskCard({ task, index, onDelete, onEdit, onSetCategory,
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
   const [draftCategoryId, setDraftCategoryId] = useState('');
+
+  // Register Escape at capture phase so it fires before @hello-pangea/dnd's
+  // global keyboard sensor, which otherwise intercepts Escape first.
+  useEffect(() => {
+    if (!editing) return;
+    function onEscape(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        cancelEdit();
+      }
+    }
+    document.addEventListener('keydown', onEscape, true);
+    return () => document.removeEventListener('keydown', onEscape, true);
+  }, [editing]);
 
   function startEdit() {
     setDraft(task.title);
@@ -38,11 +53,10 @@ export default function TaskCard({ task, index, onDelete, onEdit, onSetCategory,
   }
 
   function handleKeyDown(e) {
-    if (e.key !== 'Enter' && e.key !== 'Escape') return;
+    if (e.key !== 'Enter') return;
     e.preventDefault();
     e.stopPropagation();
-    if (e.key === 'Enter') saveEdit();
-    else cancelEdit();
+    saveEdit();
   }
 
   const trimmed = draft.trim();
