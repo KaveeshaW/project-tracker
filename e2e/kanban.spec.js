@@ -49,6 +49,22 @@ test.describe('Kanban board', () => {
     await expect(page.locator('.task-card').first()).toContainText('Updated title');
   });
 
+  test('pressing Escape in edit mode cancels without saving', async ({ page, request }) => {
+    await request.post(`${API}/tasks`, {
+      data: { projectId, title: 'Original title' },
+    });
+    await page.reload();
+    await page.selectOption('select', String(projectId));
+
+    await page.locator('.edit-btn').first().click();
+    await page.locator('.task-edit-input').fill('Changed title');
+    await page.keyboard.press('Escape');
+
+    // Card should still show original title, not be in edit mode
+    await expect(page.locator('.task-card').first()).toContainText('Original title');
+    await expect(page.locator('.task-edit-input')).toHaveCount(0);
+  });
+
   // ─── Drag task ────────────────────────────────────────────────────────────
 
   test('dragging a task from To Do to In Progress moves it', async ({ page, request }) => {
