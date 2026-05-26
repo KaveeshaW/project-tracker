@@ -24,6 +24,9 @@ export const updateTaskTitle = (id, title) =>
   request(`/tasks/${id}`, { method: 'PATCH', body: JSON.stringify({ title }) });
 export const deleteTask = (id) => request(`/tasks/${id}`, { method: 'DELETE' });
 
+export const updateTaskCategory = (id, categoryId) =>
+  request(`/tasks/${id}`, { method: 'PATCH', body: JSON.stringify({ category_id: categoryId }) });
+
 export const getCategories = () => request('/categories');
 export const createCategory = (name, color) =>
   request('/categories', { method: 'POST', body: JSON.stringify({ name, color }) });

@@ -7,7 +7,7 @@ const LABELS = {
   'done': 'Done',
 };
 
-export default function Column({ status, tasks, onDelete, onEdit, categories }) {
+export default function Column({ status, tasks, onDelete, onEdit, onSetCategory, categories }) {
   return (
     <div className="column">
       <h2 className="column-title">{LABELS[status]}</h2>
@@ -19,7 +19,7 @@ export default function Column({ status, tasks, onDelete, onEdit, categories }) 
             {...provided.droppableProps}
           >
             {tasks.map((task, index) => (
-              <TaskCard key={task.id} task={task} index={index} onDelete={onDelete} onEdit={onEdit} categories={categories} />
+              <TaskCard key={task.id} task={task} index={index} onDelete={onDelete} onEdit={onEdit} onSetCategory={onSetCategory} categories={categories} />
             ))}
             {provided.placeholder}
           </div>

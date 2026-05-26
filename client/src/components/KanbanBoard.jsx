@@ -3,7 +3,7 @@ import Column from './Column';
 
 const STATUSES = ['todo', 'in-progress', 'done'];
 
-export default function KanbanBoard({ tasks, onDragEnd, onDelete, onEdit, activeFilter, categories }) {
+export default function KanbanBoard({ tasks, onDragEnd, onDelete, onEdit, onSetCategory, activeFilter, categories }) {
   const visibleTasks = activeFilter != null
     ? tasks.filter((t) => t.category_id === activeFilter)
     : tasks;
@@ -24,6 +24,7 @@ export default function KanbanBoard({ tasks, onDragEnd, onDelete, onEdit, active
             tasks={visibleTasks.filter((t) => t.status === status)}
             onDelete={onDelete}
             onEdit={onEdit}
+            onSetCategory={onSetCategory}
             categories={categories}
           />
         ))}

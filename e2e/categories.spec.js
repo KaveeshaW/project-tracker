@@ -133,6 +133,51 @@ test.describe('Category features', () => {
     await expect(ringCard.locator('.ring-pct')).toContainText('100%');
   });
 
+  // ─── Edit task category ───────────────────────────────────────────────────
+
+  test('changing category in edit mode updates the dot and ring counts', async ({ page, request }) => {
+    const catA = await createCategoryViaApi(request, `CatA-${Date.now()}`, '#3498db');
+    const catB = await createCategoryViaApi(request, `CatB-${Date.now()}`, '#e74c3c');
+
+    await request.post(`${API}/tasks`, {
+      data: { projectId, title: 'Switch me', category_id: catA.id },
+    });
+    await page.reload();
+    await page.selectOption('select', String(projectId));
+
+    // catA ring shows 0/1, catB shows 0/0
+    const ringA = page.locator('.category-card', { hasText: catA.name });
+    const ringB = page.locator('.category-card', { hasText: catB.name });
+    await expect(ringA.locator('.category-card-count')).toContainText('0 / 1 done');
+    await expect(ringB.locator('.category-card-count')).toContainText('0 / 0 done');
+
+    // Open edit, change category to catB
+    await page.locator('.edit-btn').first().click();
+    await page.selectOption('.task-cat-select', String(catB.id));
+    await page.click('button:has-text("Save")');
+
+    // catA ring now 0/0, catB now 0/1
+    await expect(ringA.locator('.category-card-count')).toContainText('0 / 0 done');
+    await expect(ringB.locator('.category-card-count')).toContainText('0 / 1 done');
+  });
+
+  test('removing category in edit mode removes the dot', async ({ page, request }) => {
+    const cat = await createCategoryViaApi(request, `RemoveCat-${Date.now()}`);
+    await request.post(`${API}/tasks`, {
+      data: { projectId, title: 'Lose my dot', category_id: cat.id },
+    });
+    await page.reload();
+    await page.selectOption('select', String(projectId));
+
+    await expect(page.locator('.task-cat-dot')).toBeVisible();
+
+    await page.locator('.edit-btn').first().click();
+    await page.selectOption('.task-cat-select', '');
+    await page.click('button:has-text("Save")');
+
+    await expect(page.locator('.task-cat-dot')).toHaveCount(0);
+  });
+
   // ─── Filter ───────────────────────────────────────────────────────────────
 
   test('clicking a ring filters the board; clicking again clears it', async ({ page, request }) => {

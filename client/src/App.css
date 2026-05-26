@@ -503,3 +503,20 @@ main {
   border-radius: 50%;
   flex-shrink: 0;
 }
+
+.task-edit-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.task-cat-select {
+  padding: 3px 6px;
+  border-radius: 3px;
+  border: 1px solid #dfe1e6;
+  font-size: 12px;
+  color: #172b4d;
+  background: white;
+}

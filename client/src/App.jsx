@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   getProjects, createProject, deleteProject,
   getTasks, createTask, updateTaskStatus, updateTaskTitle, deleteTask,
-  getCategories, createCategory, deleteCategory,
+  getCategories, createCategory, deleteCategory, updateTaskCategory,
 } from './api';
 import ProjectSelector from './components/ProjectSelector';
 import KanbanBoard from './components/KanbanBoard';
@@ -81,6 +81,16 @@ export default function App() {
     }
   }
 
+  async function handleSetTaskCategory(id, categoryId) {
+    const original = tasks.find((t) => t.id === id)?.category_id;
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, category_id: categoryId } : t)));
+    try {
+      await updateTaskCategory(id, categoryId);
+    } catch {
+      setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, category_id: original } : t)));
+    }
+  }
+
   async function handleDragEnd(result) {
     const { destination, source, draggableId } = result;
     if (!destination || destination.droppableId === source.droppableId) return;
@@ -133,6 +143,7 @@ export default function App() {
               onDragEnd={handleDragEnd}
               onDelete={handleDelete}
               onEdit={handleEditTask}
+              onSetCategory={handleSetTaskCategory}
               activeFilter={activeFilter}
               categories={categories}
             />
